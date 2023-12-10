@@ -13,8 +13,6 @@ gem "sprockets-rails"
 gem "sqlite3", "~> 1.4"
 
 
-gem "passenger"
-
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 
@@ -71,3 +69,5 @@ group :test do
   gem "webdrivers"
 
 end
+
+gem "puma", "~> 6.4"
