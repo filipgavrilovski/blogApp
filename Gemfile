@@ -9,9 +9,8 @@ gem "rails", "~> 7.0.8"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
-
+# Use postgresql as the database for Active Record
+gem 'pg'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -71,3 +70,7 @@ group :test do
 end
 
 gem "puma", "~> 6.4"
+
+gem "dockerfile-rails", ">= 1.5", :group => :development
+
+
