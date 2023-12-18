@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for ruby-blog-app-cold-fog-7554 on 2023-12-16T18:00:47+01:00
+# fly.toml app configuration file generated for ruby-blog
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "ruby-blog-app-cold-fog-7554"
+app = "ruby-blog-app"
 primary_region = "ams"
 console_command = "/rails/bin/rails console"
 
