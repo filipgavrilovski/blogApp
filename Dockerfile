@@ -70,8 +70,5 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 
-RUN sudo chmod -R a+x *bin*
-
-RUN sudo chmod +x ./bin/*
 
 CMD ["./bin/rails", "server"]
