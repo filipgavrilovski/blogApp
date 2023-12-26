@@ -64,7 +64,7 @@ USER 1000:1000
 ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true"
 
-RUN chmod +x /bin/rails
+RUN chmod +x /rails/bin/docker-entrypoint ./bin/rails db:prepare
 # Entrypoint sets up the container.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
