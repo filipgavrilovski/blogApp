@@ -64,11 +64,11 @@ USER 1000:1000
 ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true"
 
+RUN chmod +x /bin/rails
 # Entrypoint sets up the container.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-
 
 CMD ["./bin/rails", "server"]
