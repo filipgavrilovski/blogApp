@@ -1,8 +1,9 @@
 # syntax = docker/dockerfile:1
-USER root
+
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.2.2
 FROM ruby:$RUBY_VERSION-slim as base
+USER root
 
 LABEL fly_launch_runtime="rails"
 
