@@ -13,3 +13,15 @@
  *= require_tree .
  *= require_self
  */
+ @import "bootstrap";
+
+ .edit {
+    color: rgb(96, 156, 196)
+ }
+ .a-primary{
+    color: rgb(184, 81, 81)
+  }
+
+  .white-link{
+   color: white
+  }

@@ -1,18 +1,25 @@
 <% unless comment.archived? %>
+<div class="comment">
+
+<span class="commenter">
 <p>
   <strong>Commenter:</strong>
-  <%= comment.commenter %>
+  <span><%= comment.commenter %></span>
 </p>
+</span>
 
+<span class="body">
 <p>
   <strong>Comment:</strong>
-  <%= comment.body %>
+  <span><%= comment.body %></span>
 </p>
+</span>
 
 <p>
- <%= link_to "Destroy Comment", [comment.article, comment], data: {
-     turbo_method: :delete,
-     turbo_confirm: "Are you sure?"
+ <%= link_to "Destroy Comment", [comment.article, comment], class: "a-primary", data: {
+     turbo_method: :delete
  } %>
 </p>
+</div>
+
 <% end %>
