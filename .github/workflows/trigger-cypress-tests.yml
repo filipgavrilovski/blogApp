@@ -2,7 +2,7 @@ name: Trigger Cypress Tests
 on:
   push:
     branches:
-      - master
+      - main
   repository_dispatch:
 
 jobs:
