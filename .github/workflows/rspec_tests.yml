@@ -18,11 +18,10 @@ jobs:
           - 6379:6379
         options: --entrypoint redis-server
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
       - name: Run tests
         run: |
