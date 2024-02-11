@@ -10,6 +10,7 @@ development:
 test:
   <<: *default
   database: blog_test
+  password: postgres
 production:
   <<: *default
   database: blog_production
