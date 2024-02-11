@@ -65,5 +65,4 @@ jobs:
           RAILS_ENV: test
         run: |
           chmod u+x bin/rails
-          bin/rails db:create db:schema:load
           bundle exec rspec
