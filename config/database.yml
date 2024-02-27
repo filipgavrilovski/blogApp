@@ -15,18 +15,22 @@ default: &default
   # password: <%= ENV.fetch("DATABASE_PASSWORD", "postgres") %>
   # timeout: <%= ENV.fetch("DATABASE_TIMEOUT", 5000) %>
   adapter: postgresql
-  username: postgres
-  password: postgres
-  host: postgres_db
-  database: postgres_db
+  # username: postgres
+  # password: postgres
+  # host: postgres_db
+  # database: postgres_db
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 development:
   <<: *default
+  adapter: postgresql
   database: blog_development
+  host: postgres_db
+  password: postgres
 test:
   <<: *default
   database: blog_test
   password: postgres
+  host: postgres_db
 production:
   <<: *default
   database: blog_production
