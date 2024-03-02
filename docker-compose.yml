@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: your_database_name
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  web:
+    image: filipgavrilovski/blog-api:id_12345
+    command: "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./web:/app
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgres://postgres:password@db:5432/your_database_name
+    networks:
+      - backend
+
+  # cypress:
+  #   image: filipgavrilovski/cypress-tests:latest
+  #   volumes:
+  #     - ./screenshots:/integration_tests/cypress/screenshots
+  #     - ./testReports:/integration_tests/cypress/reports
+  #   pull_policy: always
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - backend
+  #   links:
+  #     - web
+  #   command: bash -c "npm install && npx cypress run --config-file configs/cypress.config-docker.js"
+
+networks:
+  backend:
+
+volumes:
+  postgres_data:

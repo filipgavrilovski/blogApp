@@ -11,6 +11,11 @@ gem "rspec-rails"
 
 gem 'shoulda-matchers'
 
+gem 'therubyracer'
+
+gem 'execjs'
+
+
 gem 'factory_bot_rails', '~> 6.2'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.8"
@@ -75,11 +80,15 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'web-console'
 
 end
 
 gem "puma", "~> 6.4"
 
 gem "dockerfile-rails", ">= 1.5", :group => :development
+
+
+
 
 
