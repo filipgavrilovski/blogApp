@@ -1,86 +1,50 @@
 version: '3'
+
 services:
-  postgres_db:
-    image: postgres
-    restart: always
+  db:
+    image: postgres:latest
+    ports:
+      - '5432:5432'
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      POSTGRES_DB: your_database_name
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
     volumes:
-      - postgres_db:/var/lib/postgresql/data'
-    logging:
-      driver: none
-    ports:
-      - 5432:5432
-  redis:
-    image: redis:4.0-alpine
-    command: redis-server
-    volumes:
-      - redis:/data
-    ports:
-      - 6379
-    logging:
-      driver: none
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
   web:
-    build: .
+    image: filipgavrilovski/blog-api:id_12345
     command: "bundle exec rails s -p 3000 -b '0.0.0.0'"
-    environment:
-      DB_USERNAME: postgres
-      DB_PASSWORD: password
-      DB_NAME: ecs_application_db
-      DB_PORT: 5432
-      DB_HOST: postgres_db
-      RAILS_MAX_THREADS: 5
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-    volumes:
-      - .:/rails-app
-      - bundle:/bundle
     ports:
       - '3000:3000'
     depends_on:
-      - 'postgres_db'
-      - 'redis'
+      - db
+    volumes:
+      - ./web:/app
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgres://postgres:password@db:5432/your_database_name
+    networks:
+      - backend
+
+  # cypress:
+  #   image: filipgavrilovski/cypress-tests:latest
+  #   volumes:
+  #     - ./screenshots:/integration_tests/cypress/screenshots
+  #     - ./testReports:/integration_tests/cypress/reports
+  #   pull_policy: always
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - backend
+  #   links:
+  #     - web
+  #   command: bash -c "npm install && npx cypress run --config-file configs/cypress.config-docker.js"
+
+networks:
+  backend:
+
 volumes:
-  postgres_db:
-  bundle:
-  redis:
-# version: '3'
-# volumes:
-#   redis_data:
-#   pg_data:
-# services:
-#   # postgres_db:
-#   #   env_file: ./.docker/docker.env
-#   #   image: postgres:14-alpine
-#   #   volumes:
-#   #     - pg_data:/var/lib/postgresql/data
-#   #     - .:/app
-#   #   user: postgres
-#   #   environment:
-#   #     - POSTGRES_PASSWORD=postgres
-#   #   healthcheck:
-#   #     test: ['CMD-SHELL', 'pg_isready']
-#   #     interval: 10s
-#   #     timeout: 5s
-#   #     retries: 5
-#   db:
-#     image: postgres:14-alpine
-#     restart: always
-#     environment:
-#       - POSTGRES_HOST_AUTH_METHOD=trust
-#     ports:
-#       - 5432:5432
-#     volumes:
-#       - ./tmp/postgres_data:/var/lib/postgresql/data
-
-#   redis:
-#     image: redis:alpine
-#     volumes:
-#       - redis_data:/data
-#     command: redis-server
-#     healthcheck:
-#       test: ['CMD', 'redis-cli', 'ping']
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
-
+  postgres_data:
