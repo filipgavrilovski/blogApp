@@ -4,8 +4,9 @@ on:
   repository_dispatch:
     types: [Check Status Of Dockerized Integration Tests]
 
-status_of_tests:
-  - name: Check for errors in Cypress Execution
-    run: echo ${{ github.event.client_payload.tag }}
-  - name: Print url
-    run: echo ${{ github.event.client_payload.url }}
+jobs:
+  status_of_tests:
+    - name: Check for errors in Cypress Execution
+      run: echo ${{ github.event.client_payload.tag }}
+    - name: Print url
+      run: echo ${{ github.event.client_payload.url }}
