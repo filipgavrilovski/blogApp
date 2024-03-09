@@ -2,6 +2,10 @@ name: Run RSpec tests
 
 on: [push]
 
+concurrency:
+  group: rspec
+  cancel-in-progress: false
+
 jobs:
   rspec:
     runs-on: ubuntu-latest
