@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Check for errors in Cypress Execution
         run: |
-          if [ ${{ github.event.client_payload.tag }} == 'success' ]; then
+          if [[ ${{ github.event.client_payload.tag }} == 'success' ]]; then
             echo "Integration Tests Passed: job url ${{ github.event.client_payload.url }}"
           else
             echo "Integration Tests Failed: job url ${{ github.event.client_payload.url }}"
