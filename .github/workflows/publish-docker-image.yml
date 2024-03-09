@@ -47,4 +47,4 @@ jobs:
           token: ${{ secrets.ACTIONS_KEY  }}
           repository: filipgavrilovski/blog_integration_tests
           event-type: cypress-docker-dev
-          client-payload: '{"tag": "${{ needs.push_to_registry.outputs.output1 }}", "repository": "${{ github.repository }}"}'
+          client-payload: '{"tag": "${{ env.SHA }}", "repository": "${{ github.repository }}"}'
