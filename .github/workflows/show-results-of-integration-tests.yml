@@ -6,10 +6,17 @@ on:
 
 jobs:
   status_of_tests:
-    name: UI Integration Specs
+    name: Check status of dockerized integration tests
     runs-on: ubuntu-latest
     steps:
       - name: Check for errors in Cypress Execution
-        run: echo ${{ github.event.client_payload.tag }}
-      - name: Print url
-        run: echo ${{ github.event.client_payload.url }}
+        run: |
+          if [ ${{ github.event.client_payload.tag }} == 'success' ]; then
+            echo "Integration Tests Passed: job url ${{ github.event.client_payload.url }}"
+            exit 1;
+          else
+            echo "Integration Tests Failed: job url ${{ github.event.client_payload.url }}"
+      #   run: (if==${{ github.event.client_payload.tag }} && echo "No errors found" || { echo "Error found in the integration tests, expand the previous step ("Check Cypress Execution") to see the error."; exit 1; }
+      #   run: echo ${{ github.event.client_payload.tag }}
+      # - name: Print url of dockerized tests workflow
+      #   run: echo ${{ github.event.client_payload.url }}
