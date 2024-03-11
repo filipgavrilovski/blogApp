@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Потребни верзии
 
-Things you may want to cover:
+Ruby верзија: 3.2.2
 
-* Ruby version
+Rails верзија: 7.0.8
 
-* System dependencies
+Postgres верзија: 14
 
-* Configuration
+Rails setup
 
-* Database creation
+Во "root" директориумот, извршете ги слените команди:
 
-* Database initialization
+    gem install bundler
+    bundle install
+    bundle exec rake db:create db:migrate
 
-* How to run the test suite
+На крај, за да ја стартувате апликацијата локално, извршете ја командата:
 
-* Services (job queues, cache servers, search engines, etc.)
+bin/rails s
 
-* Deployment instructions
-
-* ...
+За да пристапите апликацијата локално, идете на http://localhost:3000
