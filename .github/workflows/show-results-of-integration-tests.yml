@@ -19,3 +19,32 @@ jobs:
             echo "Integration Tests Failed: job url ${{ github.event.client_payload.url }}"
             exit 1
           fi
+     - name: Integration Tests ✅
+       if: ${{ success() }}
+       run: |
+        curl --request POST \
+        --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json' \
+        --data '{
+          "context": "Integration Tests",
+          "state": "success",
+          "description": "Integration tests passed",
+          "target_url": "${{ github.event.client_payload.url }}"
+        }'
+      - name: Integration Tests 🚨
+        if: ${{ failure() }}
+        # set the merge commit status check
+        # using GitHub REST API
+        # see https://docs.github.com/en/rest/reference/repos#create-a-commit-status
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --data '{
+            "context": "Integration Tests",
+            "state": "failure",
+            "description": "Integration tests failed",
+            "target_url": "${{ github.event.client_payload.url }}"
+          }'
