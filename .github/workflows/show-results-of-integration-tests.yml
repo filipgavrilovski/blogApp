@@ -30,7 +30,7 @@ jobs:
             "context": "Integration Tests",
             "state": "success",
             "description": "Integration tests passed",
-            "target_url": "${{ github.event.client_payload.url }}"
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           }'
       - name: Integration Tests 🚨
         if: ${{ failure() }}
@@ -46,5 +46,5 @@ jobs:
             "context": "Integration Tests",
             "state": "failure",
             "description": "Integration tests failed",
-            "target_url": "${{ github.event.client_payload.url }}"
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           }'
