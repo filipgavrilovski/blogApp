@@ -1,0 +1,79 @@
+name: Dockerized integration tests
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+    types: [cypress-docker-dev]
+  workflow_dispatch:
+
+env:
+  DOCKER_IMAGE_NAME: blog-api
+  DOCKER_REGISTRY: filipgavrilovski
+
+concurrency:
+  group: docker_integration_tests
+  cancel-in-progress: true
+
+jobs:
+  integration-tests-docker:
+    name: Run integration tests with Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      # - name: Print the image tag
+      #   run: echo "${{ github.event.client_payload.tag }}"
+      # - name: Replacing the web DockerImage in Docker Compose file
+      #   run: |
+      #     sed -i'.bak' 's/${WEB_TAG_NAME:-latest}/${{ github.event.client_payload.tag }}/g' docker-compose.yml
+      #     cat docker-compose.yml
+      - name: Creating a directory to save the Cypress Screenshots
+        run: |
+          mkdir -p screenshots
+          sudo chmod 0777 screenshots
+          sudo chown -R 1000:docker screenshots
+      - name: Creating a directory to save the Cypress Reports
+        run: |
+          mkdir -p reports
+      - name: Creating a directory to save the Mochawesome Test Report
+        run: |
+          mkdir -p testReports
+          sudo chmod 0777 testReports
+          sudo chown -R 1000:docker testReports
+      - name: Run migrations
+        run: docker compose run web bundle exec rails db:migrate
+      - name: Compose UP
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: docker compose up -d
+      - name: Check Running Containers
+        run: docker compose ps
+      - name: Check Cypress Execution
+        run: |
+          docker logs -t -f blog_integration_tests-cypress-1
+          DOCKER_CONTAINER_ID=$(docker ps --no-trunc -aqf "name=^blog_integration_tests-cypress-1$")
+          sudo cp /var/lib/docker/containers/$DOCKER_CONTAINER_ID/"$DOCKER_CONTAINER_ID-json.log" reports/output.log
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Cypress-Screenshots
+          path: screenshots
+          retention-days: 5
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Test Reports
+          path: testReports
+          retention-days: 5
+      - name: Check for errors in Cypress Execution
+        run: (sudo cat reports/output.log | grep -q "All specs passed") && [ $? -eq 0 ] && echo "No errors found" || { echo "Error found in the integration tests, expand the previous step ("Check Cypress Execution") to see the error."; exit 1; }
+      - name: Shutdown running containers
+        uses: nick-fields/retry@v2
+        if: success() || failure()
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: docker compose down

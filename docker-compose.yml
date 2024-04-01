@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: filipgavrilovski/blog-api:id_123456
+    image: filipgavrilovski/blog-api:5b288f5
     command: "bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
       - '3000:3000'
@@ -12,22 +12,18 @@ services:
       - ./web:/app
     environment:
       - RAILS_ENV=development
-      - DATABASE_URL=postgres://postgres:password@db:5432/your_database_name
-    links:
-      - db:db
+      - DATABASE_URL=postgres://postgres:password@db:5432/database
     networks:
       - backend
 
   db:
-    container_name: db
-    image: postgres:latest
+    image: postgres:14
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_DB: your_database_name
+      POSTGRES_DB: database
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
