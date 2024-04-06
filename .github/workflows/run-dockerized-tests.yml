@@ -1,8 +1,5 @@
 name: Dockerized integration tests
 on:
-  push:
-    branches:
-      - main
   repository_dispatch:
     types: [cypress-docker-dev]
   workflow_dispatch:
