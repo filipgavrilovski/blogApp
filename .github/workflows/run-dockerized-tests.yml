@@ -10,7 +10,7 @@ env:
 
 concurrency:
   group: docker_integration_tests
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   integration-tests-docker:
