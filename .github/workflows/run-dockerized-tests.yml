@@ -19,17 +19,10 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
-      - name: Print the image tag
-        run: echo "${{ github.event.client_payload.tag }}"
       - name: Replacing the web DockerImage in Docker Compose file
         run: |
           sed -i'.bak' 's/${WEB_TAG_NAME:-latest}/${{ github.event.client_payload.tag }}/g' docker-compose.yml
           cat docker-compose.yml
-      - name: Creating a directory to save the Cypress Screenshots
-        run: |
-          mkdir -p screenshots
-          sudo chmod 0777 screenshots
-          sudo chown -R 1000:docker screenshots
       - name: Creating a directory to save the Cypress Reports
         run: |
           mkdir -p reports
