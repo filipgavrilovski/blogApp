@@ -23,9 +23,6 @@ jobs:
         run: |
           sed -i'.bak' 's/${WEB_TAG_NAME:-latest}/${{ github.event.client_payload.tag }}/g' docker-compose.yml
           cat docker-compose.yml
-      - name: Creating a directory to save the Cypress Reports
-        run: |
-          mkdir -p reports
       - name: Creating a directory to save the Mochawesome Test Report
         run: |
           mkdir -p testReports
@@ -34,7 +31,7 @@ jobs:
       - name: Run migrations
         run: docker compose run web bundle exec rails db:migrate
       - name: Compose UP
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 5
           max_attempts: 3
@@ -47,12 +44,8 @@ jobs:
           docker logs -t -f blogapp-cypress-1
           DOCKER_CONTAINER_ID=$(docker ps --no-trunc -aqf "name=^blogapp-cypress-1$")
           sudo cp /var/lib/docker/containers/$DOCKER_CONTAINER_ID/"$DOCKER_CONTAINER_ID-json.log" reports/output.log
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Cypress-Screenshots
-          path: screenshots
-          retention-days: 5
-      - uses: actions/upload-artifact@v3
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
         with:
           name: Test Reports
           path: testReports
@@ -60,7 +53,7 @@ jobs:
       - name: Check for errors in Cypress Execution
         run: (sudo cat reports/output.log | grep -q "All specs passed") && [ $? -eq 0 ] && echo "No errors found" || { echo "Error found in the integration tests, expand the previous step ("Check Cypress Execution") to see the error."; exit 1; }
       - name: Shutdown running containers
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         if: success() || failure()
         with:
           timeout_minutes: 5
