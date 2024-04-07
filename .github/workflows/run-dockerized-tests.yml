@@ -23,6 +23,9 @@ jobs:
         run: |
           sed -i'.bak' 's/${WEB_TAG_NAME:-latest}/${{ github.event.client_payload.tag }}/g' docker-compose.yml
           cat docker-compose.yml
+      - name: Creating a directory to save the Cypress Reports
+        run: |
+          mkdir -p reports
       - name: Creating a directory to save the Mochawesome Test Report
         run: |
           mkdir -p testReports
